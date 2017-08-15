@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "debian/jessie64"
+  config.vm.box = "ole/jessie64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -70,23 +70,7 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  config.vm.provision "shell", inline: <<-SHELL
-    # update packages list
-    apt-get update
-    apt-get install software-properties-common -y
-    # install packages to allow apt over https
-    apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common -y
-    # add docker official GPG key
-    curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-    apt-key fingerprint 0EBFCD88
-    # add repository
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-    # update packages list again
-    apt-get update
-    # install docker-ce
-    apt-get install docker-ce -y
-    sudo usermod -aG docker $USER
-    sudo usermod -aG docker vagrant
+  config.vm.provision "shell", inline: <<-SHELLt
     # register multiarch
     docker run --rm --privileged multiarch/qemu-user-static:register --reset
   SHELL
